@@ -60,17 +60,6 @@ class AgentsWire extends Build {
   build = target()
     .description("Bundle the SDK with tsup and emit its declarations with tsc")
     .dependsOn(this.install)
-    // Incremental: skipped when nothing under src/ or the build config changed
-    // and dist/ is still there.
-    .inputs(
-      `${SDK}/src`,
-      `${SDK}/package.json`,
-      `${SDK}/tsup.config.ts`,
-      `${SDK}/tsconfig.json`,
-      `${SDK}/tsconfig.build.json`,
-      "bun.lock",
-    )
-    .outputs(`${SDK}/dist`)
     .executes(async () => {
       await TsupTasks.build((s) => s.cwd(SDK));
       await TscTasks.tsc((s) => s.project("tsconfig.build.json").emitDeclarationOnly().cwd(SDK));
